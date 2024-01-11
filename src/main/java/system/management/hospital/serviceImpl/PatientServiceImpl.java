@@ -1,10 +1,10 @@
-package com.system.HospitalManagementSystem.serviceImpl;
+package system.management.hospital.serviceImpl;
 
-import com.system.HospitalManagementSystem.exception.InvalidResourceException;
-import com.system.HospitalManagementSystem.exception.ResourceNotFoundException;
-import com.system.HospitalManagementSystem.model.Patient;
-import com.system.HospitalManagementSystem.repository.PatientRepository;
-import com.system.HospitalManagementSystem.service.PatientService;
+import system.management.hospital.exception.InvalidResourceException;
+import system.management.hospital.exception.ResourceNotFoundException;
+import system.management.hospital.model.Patient;
+import system.management.hospital.repository.PatientRepository;
+import system.management.hospital.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,24 +29,20 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient savePatient(Patient patient) {
-        try {
-            return patientRepository.save(patient);
-        } catch (Exception e) {
-            throw new InvalidResourceException("Failed to save patient: " + e.getMessage());
-        }
+        return patientRepository.save(patient);
     }
 
     @Override
-    public void deletePatient(Long id) {
-        try {
+    public void deletePatient(Long id) throws ResourceNotFoundException {
+        if (patientRepository.existsById(id)) {
             patientRepository.deleteById(id);
-        } catch (Exception e) {
+        } else {
             throw new ResourceNotFoundException("Patient not found with id: " + id);
         }
     }
 
     @Override
-    public Patient updatePatient(Long id, Patient updatedPatient) {
+    public Patient updatePatient(Long id, Patient updatedPatient) throws InvalidResourceException {
         return patientRepository.findById(id)
                 .map(existingPatient -> {
                     existingPatient.setName(updatedPatient.getName());
@@ -55,6 +51,8 @@ public class PatientServiceImpl implements PatientService {
                     existingPatient.setContactInfo(updatedPatient.getContactInfo());
                     return patientRepository.save(existingPatient);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+                .orElseThrow(() ->
+                        new InvalidResourceException("Patient with id: " + id + " could not be updated.")
+                );
     }
 }

@@ -1,4 +1,4 @@
-package com.system.HospitalManagementSystem.exception;
+package system.management.hospital.exception;
 
 public class InvalidResourceException extends RuntimeException{
 

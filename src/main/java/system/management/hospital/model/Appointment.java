@@ -1,4 +1,4 @@
-package com.system.HospitalManagementSystem.model;
+package system.management.hospital.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

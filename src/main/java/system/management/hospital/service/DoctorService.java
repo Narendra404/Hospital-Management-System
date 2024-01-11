@@ -1,6 +1,6 @@
-package com.system.HospitalManagementSystem.service;
+package system.management.hospital.service;
 
-import com.system.HospitalManagementSystem.model.Doctor;
+import system.management.hospital.model.Doctor;
 
 import java.util.List;
 import java.util.Optional;

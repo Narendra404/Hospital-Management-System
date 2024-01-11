@@ -1,6 +1,6 @@
-package com.system.HospitalManagementSystem.service;
+package system.management.hospital.service;
 
-import com.system.HospitalManagementSystem.model.Appointment;
+import system.management.hospital.model.Appointment;
 
 import java.util.List;
 import java.util.Optional;

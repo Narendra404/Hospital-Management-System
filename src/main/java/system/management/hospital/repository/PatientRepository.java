@@ -1,6 +1,6 @@
-package com.system.HospitalManagementSystem.repository;
+package system.management.hospital.repository;
 
-import com.system.HospitalManagementSystem.model.Patient;
+import system.management.hospital.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {

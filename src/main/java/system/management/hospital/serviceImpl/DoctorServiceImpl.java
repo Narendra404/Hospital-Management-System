@@ -1,12 +1,12 @@
-package com.system.HospitalManagementSystem.serviceImpl;
+package system.management.hospital.serviceImpl;
 
-import com.system.HospitalManagementSystem.exception.InvalidResourceException;
-import com.system.HospitalManagementSystem.exception.ResourceNotFoundException;
-import com.system.HospitalManagementSystem.model.Doctor;
-import com.system.HospitalManagementSystem.repository.DoctorRepository;
-import com.system.HospitalManagementSystem.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import system.management.hospital.exception.InvalidResourceException;
+import system.management.hospital.exception.ResourceNotFoundException;
+import system.management.hospital.model.Doctor;
+import system.management.hospital.repository.DoctorRepository;
+import system.management.hospital.service.DoctorService;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,24 +28,20 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Doctor saveDoctor(Doctor doctor) {
-        try {
-            return doctorRepository.save(doctor);
-        } catch (Exception e) {
-            throw new InvalidResourceException("Failed to save doctor: " + e.getMessage());
-        }
+        return doctorRepository.save(doctor);
     }
 
     @Override
-    public void deleteDoctor(Long id) {
-        try {
+    public void deleteDoctor(Long id) throws ResourceNotFoundException {
+        if (doctorRepository.existsById(id)) {
             doctorRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Doctor not found with id: " + id);
+        } else {
+            throw new ResourceNotFoundException("Doctor with id : " + id + " not found.");
         }
     }
 
     @Override
-    public Doctor updateDoctor(Long id, Doctor updatedDoctor) {
+    public Doctor updateDoctor(Long id, Doctor updatedDoctor) throws InvalidResourceException {
         return doctorRepository.findById(id)
                 .map(existingDoctor -> {
                     existingDoctor.setFirstName(updatedDoctor.getFirstName());
@@ -56,6 +52,8 @@ public class DoctorServiceImpl implements DoctorService {
                     existingDoctor.setFees(updatedDoctor.getFees());
                     return doctorRepository.save(existingDoctor);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
+                .orElseThrow(() ->
+                        new InvalidResourceException("Doctor with id: " + id + " could not be updated.")
+                );
     }
 }
